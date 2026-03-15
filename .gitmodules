@@ -1,0 +1,6 @@
+[submodule "numerology"]
+	path = numerology
+	url = https://github.com/yt-pf/numerology
+[submodule "meishiki"]
+	path = meishiki
+	url = https://github.com/hajime-f/meishiki

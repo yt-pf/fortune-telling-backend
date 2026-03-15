@@ -1,0 +1,40 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+
+      - name: Run ruff (fast lint + formatting)
+        run: uv run ruff check .
+
+      - name: Run pylint
+        run: uv run pylint --fail-under=8.0 **/*.py
+
+      - name: Run mypy (type checking)
+        run: uv run mypy .
+
+      - name: Run tests
+        run: uv run pytest
